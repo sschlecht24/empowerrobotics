@@ -95,6 +95,7 @@ Where to find OnBotJava/Network info:
 ![App Screenshot](https://i.ibb.co/61BJSt6/SS1.png)
 
 How to upload files:
+
 ![App Screenshot](https://i.ibb.co/T4Y53BS/SS2.png)
 
 Example of where to edit code:
