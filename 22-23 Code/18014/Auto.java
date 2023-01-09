@@ -62,8 +62,9 @@ public class Auto extends LinearOpMode {
     /* Declare OpMode members. */
     private DcMotor         leftDrive   = null;
     private DcMotor         rightDrive  = null;
-    public Servo A = null;
-    public Servo B = null;
+    private DcMotor         frontLeft  = null;
+    private DcMotor         frontRight  = null;
+    public Servo grip = null;
 
     private ElapsedTime     runtime = new ElapsedTime();
 
@@ -77,18 +78,20 @@ public class Auto extends LinearOpMode {
         // Initialize the drive system variables.
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-        A = hardwareMap.get(Servo.class, "a");
-        B = hardwareMap.get(Servo.class, "b");
+        frontLeft  = hardwareMap.get(DcMotor.class, "frontLeft");
+        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+        grip = hardwareMap.get(Servo.class, "grip");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        leftDrive.setDirection(DcMotor.Direction.REVERSE);
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftDrive.setDirection(DcMotor.Direction.FORWARD);
         
-          B.setPosition(1);
-           A.setPosition(0);
-          
+        grip.setPosition(1);
+
           
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -101,7 +104,9 @@ public class Auto extends LinearOpMode {
 
         // Step 1:  Drive forward for 3 seconds
         leftDrive.setPower(-FORWARD_SPEED);
-        rightDrive.setPower(-FORWARD_SPEED);
+        rightDrive.setPower(FORWARD_SPEED);
+        frontLeft.setPower(-FORWARD_SPEED);
+        frontRight.setPower(FORWARD_SPEED);
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 3.0)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
@@ -112,7 +117,8 @@ public class Auto extends LinearOpMode {
         // Step 4:  Stop
         leftDrive.setPower(0);
         rightDrive.setPower(0);
-
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);
